@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>APIテスト</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
+  <body>
+    <div class="wrapper">
+      <p>A: <span class="talk_a" /></p>
+      <p>B: <span class="talk_b" /></p>
+    </div>
+    <button id="getTalkBtn">更新</button>
+    <script>
+      let DOM = {};
+      window.addEventListener("DOMContentLoaded", async () => {
+        DOM.talkA = document.querySelector(".talk_a");
+        DOM.talkB = document.querySelector(".talk_b");
+        DOM.btn = document.querySelector("#getTalkBtn");
+
+        setTalk();
+
+        DOM.btn.addEventListener("click", async () => {
+          try {
+            setTalk();
+          } catch (error) {
+            alert(error);
+          }
+        });
+      });
+      
+      async function setTalk() {
+        try {
+          const talkData = await getTalk();
+          DOM.talkA.innerText = talkData.talk_a;
+          DOM.talkB.innerText = talkData.talk_b;
+        } catch (error) {
+          alert(error);
+        }
+      }
+
+      function getTalk() {
+        return axios
+          .get("http://localhost/test/api.php")
+          .then(function (response) {
+            return response.data;
+          })
+          .catch(function (error) {
+            throw new Error("エラーが発生しました。");
+          });
+      }
+    </script>
+  </body>
+</html>
+
